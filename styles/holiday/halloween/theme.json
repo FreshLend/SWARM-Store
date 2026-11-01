@@ -1,7 +1,7 @@
 {
   "name": "Halloween",
   "author": "FreshGame",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Spooky vibes with dark purple and pumpkin orange.",
   "colors": {
     "bg":        "#0a0a0a",
@@ -23,7 +23,7 @@
     "shadow":    "rgba(0, 0, 0, 0.9)"
   },
   "fonts": {
-    "family": "'Trebuchet MS', 'Segoe UI', sans-serif",
+    "family": "'Consolas', 'Courier New', monospace",
     "size": 12,
     "size_small": 11,
     "size_title": 22,
