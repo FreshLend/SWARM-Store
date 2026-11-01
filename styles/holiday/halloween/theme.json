@@ -1,0 +1,35 @@
+{
+  "name": "Halloween",
+  "author": "FreshGame",
+  "version": "1.0.0",
+  "description": "Spooky vibes with dark purple and pumpkin orange.",
+  "colors": {
+    "bg":        "#0a0a0a",
+    "bg2":       "#141018",
+    "bg3":       "#1f1625",
+    "bg4":       "#2d2035",
+    "bg5":       "#3b2a45",
+    "fg":        "#ff7518",
+    "fg_dim":    "#a0522d",
+    "fg_soft":   "#ff9b54",
+    "fg_dark":   "#5c2e16",
+    "border":    "#2d2035",
+    "border_hi": "#ff7518",
+    "sel_bg":    "#ff7518",
+    "sel_fg":    "#0a0a0a",
+    "danger":    "#d00000",
+    "warning":   "#ffba08",
+    "success":   "#39ff14",
+    "shadow":    "rgba(0, 0, 0, 0.9)"
+  },
+  "fonts": {
+    "family": "'Trebuchet MS', 'Segoe UI', sans-serif",
+    "size": 12,
+    "size_small": 11,
+    "size_title": 22,
+    "size_h1": 16,
+    "size_icon": 28
+  },
+  "radius": 4,
+  "spacing": 6
+}
