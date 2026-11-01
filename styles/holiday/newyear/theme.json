@@ -1,7 +1,7 @@
 {
   "name": "New Year",
   "author": "FreshGame",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Festive winter vibes with ice blue and gold.",
   "colors": {
     "bg":        "#0b132b",
@@ -23,7 +23,7 @@
     "shadow":    "rgba(0, 0, 0, 0.9)"
   },
   "fonts": {
-    "family": "'Georgia', 'Times New Roman', serif",
+    "family": "'Consolas', 'Courier New', monospace",
     "size": 12,
     "size_small": 11,
     "size_title": 22,
