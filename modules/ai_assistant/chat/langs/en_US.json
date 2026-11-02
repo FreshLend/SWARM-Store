@@ -1,0 +1,17 @@
+{
+  "name": "Chat",
+  "description": "Text chat interface with context memory.",
+  "placeholder": "Type your message...",
+  "send": "Send",
+  "new_session": "New Chat",
+  "delete_session": "Delete Chat",
+  "session_name_prompt": "Enter new chat name:",
+  "confirm_delete": "Are you sure you want to delete this chat?",
+  "no_ai": "AI Control module is not available or missing dependencies.",
+  "thinking": "Thinking...",
+  "user": "You",
+  "ai": "AI",
+  "session_exists": "Chat with this name already exists.",
+  "shift_enter": "(Shift+Enter for new line)",
+  "default_session": "Default"
+}

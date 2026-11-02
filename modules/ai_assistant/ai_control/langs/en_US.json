@@ -1,0 +1,20 @@
+{
+  "name": "AI Control",
+  "description": "Core AI engine supporting OpenAI, Ollama, and local Llama.cpp models.",
+  "missing_deps": "Missing Dependencies",
+  "missing_deps_text": "The following Python packages are required for this module to work:",
+  "install_cmd": "Run this command in your terminal:",
+  "settings": "AI Engine Settings",
+  "provider": "Provider:",
+  "model": "Model:",
+  "open_models": "Models",
+  "local_model": "Local Model:",
+  "api_key": "API Key:",
+  "host": "Host URL / Path:",
+  "system_prompt": "System Prompt:",
+  "save": "Save Configuration",
+  "extra_prompts": "Prompts injected by other modules:",
+  "no_extra": "No extra prompts registered.",
+  "saved": "Configuration saved successfully.",
+  "default_system_prompt": "You are Aura, the assistant of this SWARM-based desktop.\nSpeak with the user the way a calm, attentive person at the same computer would: naturally, concisely, without scripted assistant phrasing.\nSWARM is modular: every module describes its own role, capabilities and constraints.\nTreat those descriptions as the source of truth and never assume or invent abilities that are not currently described.\nUnderstand what the user actually wants, keep the interaction human and context-aware, and act through the surrounding environment when it is appropriate and available.\nBe proactive without being pushy; ask only when intent is genuinely unclear."
+}

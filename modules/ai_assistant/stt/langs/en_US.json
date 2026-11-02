@@ -1,0 +1,22 @@
+{
+  "name": "STT (Speech to Text)",
+  "description": "Continuously listens to microphone and sends messages to Chat when a wake word is detected.",
+  "missing_deps": "Missing Dependencies",
+  "missing_deps_text": "The following Python packages are required for this module to work:",
+  "install_cmd": "Run this command in your terminal:",
+  "settings": "STT Settings",
+  "wake_words": "Wake Words (comma separated):",
+  "model_size": "Whisper Model Size:",
+  "language": "Language:",
+  "device": "Device (cpu/cuda):",
+  "target_session": "Target Chat:",
+  "start_listening": "Start Listening",
+  "stop_listening": "Stop Listening",
+  "status_off": "Status: Microphone is OFF",
+  "status_on": "Status: Listening... (Say one of your wake words)",
+  "status_loading": "Status: Loading model...",
+  "log": "Recognition Log",
+  "warn_title": "Warning",
+  "warn_no_wake_words": "Please enter at least one wake word.",
+  "err_prefix": "Error:"
+}

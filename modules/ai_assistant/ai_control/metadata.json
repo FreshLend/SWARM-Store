@@ -1,0 +1,7 @@
+{
+  "name": "AI Control",
+  "version": "1.0.0",
+  "author": "FreshGame",
+  "description": "Core AI engine supporting OpenAI, Ollama, and local Llama.cpp models.",
+  "icon_name": "code"
+}

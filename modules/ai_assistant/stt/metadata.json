@@ -1,0 +1,10 @@
+{
+  "name": "STT (Speech to Text)",
+  "version": "1.0.0",
+  "author": "FreshGame",
+  "description": "Continuously listens to microphone and sends messages to Chat when a wake word is detected.",
+  "icon_name": "play",
+  "dependencies": {
+    "chat": ">=1.0.0"
+  }
+}
