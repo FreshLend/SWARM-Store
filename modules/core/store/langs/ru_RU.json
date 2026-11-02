@@ -37,5 +37,7 @@
   "dlg_add_repo_title": "Добавить репозиторий",
   "dlg_add_repo_text": "Введите GitHub репозиторий (формат: owner/repo):\nПример: FreshLend/SWARM-Store",
   "dlg_manage_repos_title": "Управление репозиториями",
-  "meta_info": "v{version} от {author}\n{category}"
+  "meta_info": "v{version} от {author}\n{category}",
+  "security_warning_title": "Предупреждение безопасности",
+  "security_warning_text": "Вы добавляете сторонний репозиторий. Модули и темы из ненадежных источников могут содержать вредоносный код, способный навредить вашему компьютеру.\n\nДобавляйте репозитории только тех авторов, которым доверяете.\n\nВы хотите продолжить?"
 }

@@ -46,27 +46,49 @@ class DownloadWorker(QThread):
         self.owner = owner
         self.repo = repo
         self.branch = branch
+        self.running = True
+
+    def stop(self):
+        self.running = False
 
     def run(self):
         try:
+            base_dir_abs = os.path.abspath(self.target_dir)
+            
             for file_info in self.files:
+                if not self.running:
+                    self.finished.emit(False, "Cancelled by user.")
+                    return
+                    
                 rel_path = file_info['path'].replace(self.base_path, "").lstrip("/")
                 if not rel_path:
                     continue
                     
-                dst = os.path.join(self.target_dir, rel_path)
+                dst = os.path.abspath(os.path.join(self.target_dir, rel_path))
+                
+                if not dst.startswith(base_dir_abs + os.sep):
+                    continue
+                    
                 if file_info['type'] == 'tree':
                     os.makedirs(dst, exist_ok=True)
                 elif file_info['type'] == 'blob':
                     os.makedirs(os.path.dirname(dst), exist_ok=True)
                     raw_url = f"https://raw.githubusercontent.com/{self.owner}/{self.repo}/{self.branch}/{file_info['path']}"
-                    r = requests.get(raw_url, timeout=15)
+                    
+                    r = requests.get(raw_url, timeout=15, stream=True)
                     r.raise_for_status()
                     with open(dst, 'wb') as f:
-                        f.write(r.content)
-            self.finished.emit(True, "Installed successfully.")
+                        for chunk in r.iter_content(chunk_size=8192):
+                            if not self.running:
+                                break
+                            if chunk:
+                                f.write(chunk)
+                                
+            if self.running:
+                self.finished.emit(True, "Installed successfully.")
         except Exception as e:
             self.finished.emit(False, str(e))
+
 
 class FetchWorker(QThread):
     finished = Signal(list, str)
@@ -74,11 +96,18 @@ class FetchWorker(QThread):
     def __init__(self, repos):
         super().__init__()
         self.repos = repos
+        self.running = True
+
+    def stop(self):
+        self.running = False
 
     def run(self):
         all_items = []
         error = ""
         for r_data in self.repos:
+            if not self.running:
+                break
+                
             owner, repo, branch = r_data["owner"], r_data["repo"], r_data["branch"]
             try:
                 url = f"https://api.github.com/repos/{owner}/{repo}/git/trees/{branch}?recursive=1"
@@ -87,6 +116,9 @@ class FetchWorker(QThread):
                 tree = r.json().get("tree", [])
                 
                 for node in tree:
+                    if not self.running:
+                        break
+                        
                     path = node['path']
                     parts = path.split('/')
                     if len(parts) == 3 and parts[0] in ('modules', 'styles') and node['type'] == 'tree':
@@ -94,6 +126,9 @@ class FetchWorker(QThread):
                         item_name = parts[2]
                         cat_name = parts[1]
                         
+                        if ".." in item_name or "/" in item_name or "\\" in item_name:
+                            continue
+                            
                         meta_path = f"{path}/metadata.json" if item_type == "Module" else f"{path}/theme.json"
                         meta = {}
                         meta_node = next((n for n in tree if n['path'] == meta_path), None)
@@ -121,7 +156,9 @@ class FetchWorker(QThread):
                         })
             except Exception as e:
                 error += f"Failed to fetch {owner}/{repo}: {e}\n"
-        self.finished.emit(all_items, error)
+                
+        if self.running:
+            self.finished.emit(all_items, error)
 
 class ManageReposDialog(QDialog):
     def __init__(self, parent, repos):
@@ -353,6 +390,17 @@ class StoreModule(BaseModule):
                     
                 if any(r["owner"] == owner and r["repo"] == repo for r in self.repos):
                     QMessageBox.information(self.widget, T("msg_success_title"), T("msg_repo_exists"))
+                    return
+
+                reply = QMessageBox.warning(
+                    self.widget,
+                    T("security_warning_title"),
+                    T("security_warning_text"),
+                    QMessageBox.Yes | QMessageBox.No,
+                    QMessageBox.No
+                )
+                
+                if reply != QMessageBox.Yes:
                     return
                 
                 self.repos.append({
@@ -674,9 +722,10 @@ class StoreModule(BaseModule):
 
     def on_shutdown(self):
         if self.fetch_worker and self.fetch_worker.isRunning():
-            self.fetch_worker.terminate()
-            self.fetch_worker.wait()
+            self.fetch_worker.stop()
+            self.fetch_worker.wait(2000)
+            
         for w in self.dl_workers:
             if w.isRunning():
-                w.terminate()
-                w.wait()
+                w.stop()
+                w.wait(2000)
