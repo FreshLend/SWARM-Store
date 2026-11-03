@@ -1,5 +1,6 @@
 import importlib.util
 import os
+import re
 import queue
 import tempfile
 import multiprocessing
@@ -223,11 +224,13 @@ class TTSModule(BaseModule):
             self._buffer += token
             if any(p in token for p in self._punct):
                 text = self._buffer.strip()
+                text = re.sub(r'\[\[EXEC:.*?\]\]', '', text).strip()
                 if text:
                     self.text_queue.put(text)
                 self._buffer = ""
         elif name == "ai.generation_done":
             text = self._buffer.strip()
+            text = re.sub(r'\[\[EXEC:.*?\]\]', '', text).strip()
             if text:
                 self.text_queue.put(text)
             self._buffer = ""

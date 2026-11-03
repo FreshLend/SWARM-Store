@@ -1,10 +1,10 @@
 {
   "name": "TTS (Text to Speech)",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "FreshGame",
   "description": "Listens to AI generated text and speaks it out loud using OpenAI-compatible APIs or local Chatterbox models.",
   "icon_name": "play",
   "dependencies": {
-    "ai_control": ">=1.0.0"
+    "ai_control": ">=1.1.0"
   }
 }

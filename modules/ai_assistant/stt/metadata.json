@@ -5,6 +5,6 @@
   "description": "Continuously listens to microphone and sends messages to Chat when a wake word is detected.",
   "icon_name": "play",
   "dependencies": {
-    "chat": ">=1.0.0"
+    "chat": ">=1.1.0"
   }
 }

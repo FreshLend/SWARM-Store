@@ -1,10 +1,10 @@
 {
   "name": "Chat",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "FreshGame",
   "description": "Text chat interface with context memory.",
   "icon_name": "info",
   "dependencies": {
-    "ai_control": ">=1.0.0"
+    "ai_control": ">=1.1.0"
   }
 }

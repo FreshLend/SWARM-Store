@@ -1,0 +1,11 @@
+{
+  "name": "PC Control",
+  "version": "1.0.0",
+  "author": "FreshGame",
+  "description": "Allows AI to execute terminal commands and open applications on Windows and Linux.",
+  "icon_name": "code",
+  "dependencies": {
+    "ai_control": ">=1.1.0",
+    "chat": ">=1.1.0"
+  }
+}

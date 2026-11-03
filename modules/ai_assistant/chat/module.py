@@ -100,12 +100,22 @@ class MessageBubble(QWidget):
         if not text:
             self.label.setText("")
             return
+        
         safe_text = html.escape(text)
+        
+        safe_text = re.sub(
+            r'\[\[EXEC:\s*(.*?)\s*\]\]', 
+            r'<span style="color: #f59e0b; font-weight: bold; background-color: #1f2937; padding: 2px 6px; border-radius: 4px; font-family: Consolas, monospace;">[EXEC] \1</span>', 
+            safe_text
+        )
+
         safe_text = re.sub(r'([^\s]{25})', r'\1&#8203;', safe_text)
+
         if is_markdown:
             safe_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', safe_text)
             safe_text = re.sub(r'(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)', r'<i>\1</i>', safe_text)
             safe_text = safe_text.replace("\n", "<br>")
+            
         self.label.setText(safe_text)
         self.label.updateGeometry()
 
@@ -484,7 +494,7 @@ class ChatModule(BaseModule):
             self.signals.token_received.emit(token, session_name)
 
         try:
-            result = get_bus().call("ai.generate", messages, callback)
+            result = get_bus().call("ai.generate", messages, callback, session_name=session_name)
             
             if result.get("ok"):
                 self.signals.finished.emit(result.get("text", ""), session_name)

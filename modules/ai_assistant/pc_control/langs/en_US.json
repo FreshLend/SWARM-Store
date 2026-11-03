@@ -1,0 +1,23 @@
+{
+  "name": "PC Control",
+  "description": "Allows AI to execute terminal commands and open applications.",
+  "settings": "System Control Settings",
+  "allow_exec": "Allow AI to execute shell commands",
+  "allow_dangerous": "Allow dangerous commands (shutdown, rm, etc.)",
+  "custom_cmds": "Custom Commands",
+  "add_cmd": "Add Command",
+  "col_name": "Name",
+  "col_desc": "Description for AI",
+  "col_cmd": "Command / Path",
+  "save": "Save Settings",
+  "saved": "Settings saved successfully.",
+  "status_active": "AI has system access.",
+  "status_inactive": "AI system access is disabled.",
+  "sys_prompt_intro": "You are running on a {os_name} system. You have access to the terminal.",
+  "sys_prompt_exec": "To execute a command, output EXACTLY this tag on a new line: [[EXEC: your_command_here]]",
+  "sys_prompt_no_backticks": "Do not wrap the command in backticks or quotes inside the [[EXEC:]] tag.",
+  "sys_prompt_example": "Example: [[EXEC: ls -la]]",
+  "sys_prompt_custom": "You also have these predefined commands:",
+  "sys_prompt_custom_runs": "(Runs: {cmd})",
+  "sys_prompt_custom_use": "To use a predefined command, just output its EXEC tag like any other command."
+}

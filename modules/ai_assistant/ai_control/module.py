@@ -378,7 +378,7 @@ class AIControlModule(BaseModule):
         get_bus().emit_event("ai.config_changed", provider=self._current_provider, model=self._current_model)
         QMessageBox.information(self.widget, T("settings"), T("saved"))
 
-    def generate_stream(self, messages, callback, provider=None, model=None):
+    def generate_stream(self, messages, callback, provider=None, model=None, session_name=None):
         p = provider or self._current_provider
         
         if p == "Local (llama-cpp-python)":
@@ -392,16 +392,16 @@ class AIControlModule(BaseModule):
 
         try:
             if p == "OpenAI":
-                return self._generate_openai(messages, m, callback)
+                return self._generate_openai(messages, m, callback, session_name)
             elif p == "Ollama":
-                return self._generate_ollama(messages, m, callback)
+                return self._generate_ollama(messages, m, callback, session_name)
             elif p == "Local (llama-cpp-python)":
-                return self._generate_local(messages, m, callback)
+                return self._generate_local(messages, m, callback, session_name)
             return {"ok": False, "error": "Unknown provider"}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
-    def _generate_openai(self, messages, model, callback):
+    def _generate_openai(self, messages, model, callback, session_name=None):
         from openai import OpenAI
         base_url = self._current_host or None
         client = OpenAI(api_key=self._current_api_key, base_url=base_url)
@@ -412,11 +412,11 @@ class AIControlModule(BaseModule):
                 token = chunk.choices[0].delta.content
                 full_response += token
                 callback(token)
-                get_bus().emit_event("ai.token_generated", token=token)
-        get_bus().emit_event("ai.generation_done", text=full_response)
+                get_bus().emit_event("ai.token_generated", token=token, session_name=session_name)
+        get_bus().emit_event("ai.generation_done", text=full_response, session_name=session_name)
         return {"ok": True, "text": full_response}
 
-    def _generate_ollama(self, messages, model, callback):
+    def _generate_ollama(self, messages, model, callback, session_name=None):
         host = self._current_host or "http://localhost:11434"
         url = f"{host}/api/chat"
         payload = {"model": model, "messages": messages, "stream": True}
@@ -430,13 +430,13 @@ class AIControlModule(BaseModule):
                         token = data["message"]["content"]
                         full_response += token
                         callback(token)
-                        get_bus().emit_event("ai.token_generated", token=token)
+                        get_bus().emit_event("ai.token_generated", token=token, session_name=session_name)
                     if data.get("done"):
                         break
-        get_bus().emit_event("ai.generation_done", text=full_response)
+        get_bus().emit_event("ai.generation_done", text=full_response, session_name=session_name)
         return {"ok": True, "text": full_response}
 
-    def _generate_local(self, messages, model, callback):
+    def _generate_local(self, messages, model, callback, session_name=None):
         from llama_cpp import Llama
         if not model:
             return {"ok": False, "error": "No local model selected"}
@@ -459,6 +459,6 @@ class AIControlModule(BaseModule):
             token = chunk["choices"][0]["text"]
             full_response += token
             callback(token)
-            get_bus().emit_event("ai.token_generated", token=token)
-        get_bus().emit_event("ai.generation_done", text=full_response)
+            get_bus().emit_event("ai.token_generated", token=token, session_name=session_name)
+        get_bus().emit_event("ai.generation_done", text=full_response, session_name=session_name)
         return {"ok": True, "text": full_response}
