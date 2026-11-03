@@ -1,6 +1,6 @@
 {
   "name": "Chat",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "FreshGame",
   "description": "Text chat interface with context memory.",
   "icon_name": "info",

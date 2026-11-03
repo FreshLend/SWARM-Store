@@ -101,7 +101,12 @@ class MessageBubble(QWidget):
             self.label.setText("")
             return
         
-        safe_text = html.escape(text)
+        text = html.unescape(text)
+        safe_text = html.escape(text, quote=False)
+        
+        safe_text = safe_text.replace("&amp;quot;", '"').replace("&amp;quote;", '"')
+        safe_text = safe_text.replace("&quot;", '"').replace("&quote;", '"')
+        safe_text = safe_text.replace("&#x27;", "'").replace("&#x22;", '"')
         
         safe_text = re.sub(
             r'\[\[EXEC:\s*(.*?)\s*\]\]', 

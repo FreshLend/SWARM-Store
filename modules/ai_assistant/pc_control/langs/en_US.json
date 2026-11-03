@@ -19,5 +19,10 @@
   "sys_prompt_example": "Example: [[EXEC: ls -la]]",
   "sys_prompt_custom": "You also have these predefined commands:",
   "sys_prompt_custom_runs": "(Runs: {cmd})",
-  "sys_prompt_custom_use": "To use a predefined command, just output its EXEC tag like any other command."
+  "sys_prompt_custom_use": "To use a predefined command, just output its EXEC tag like any other command.",
+  "security_mode": "Security Mode:",
+  "mode_blacklist": "Blacklist",
+  "mode_whitelist": "Whitelist",
+  "blacklist": "Blacklist Rules (Regex)",
+  "whitelist": "Whitelist Rules (Regex)"
 }
