@@ -4,7 +4,6 @@ import os
 import sys
 import subprocess
 from pathlib import Path
-import requests
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QComboBox, QLineEdit, QTextEdit, 
     QPushButton, QGroupBox, QFormLayout, QMessageBox
@@ -417,6 +416,7 @@ class AIControlModule(BaseModule):
         return {"ok": True, "text": full_response}
 
     def _generate_ollama(self, messages, model, callback, session_name=None):
+        import requests
         host = self._current_host or "http://localhost:11434"
         url = f"{host}/api/chat"
         payload = {"model": model, "messages": messages, "stream": True}

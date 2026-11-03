@@ -1,7 +1,6 @@
 import importlib.util
 import threading
 import time
-import numpy as np
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QLineEdit, QComboBox, 
     QPushButton, QGroupBox, QFormLayout, QMessageBox, QPlainTextEdit
@@ -33,6 +32,7 @@ class STTWorker(QThread):
 
     def run(self):
         try:
+            import numpy as np
             self.status_update.emit(T("status_loading"))
             from faster_whisper import WhisperModel
             import sounddevice as sd
@@ -95,7 +95,6 @@ class STTWorker(QThread):
 
     def stop(self):
         self.running = False
-
 
 class STTModule(BaseModule):
     def __init__(self):

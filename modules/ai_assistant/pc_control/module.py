@@ -7,9 +7,8 @@ from pathlib import Path
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QGroupBox,
     QFormLayout, QCheckBox, QTableWidget, QTableWidgetItem, QHeaderView,
-    QAbstractItemView, QLineEdit, QMessageBox
+    QAbstractItemView, QMessageBox
 )
-from PySide6.QtCore import Qt
 from core.base_module import BaseModule
 from core.module_api import get_bus
 from core.settings import get_settings
@@ -118,11 +117,9 @@ class PCControlModule(BaseModule):
                 os_name, shell = self._get_os_info()
                 try:
                     if os_name == "Windows" and command.lower().startswith("start"):
-                        import subprocess
                         subprocess.Popen(command, shell=True)
                         output = "Application launched in background."
                     elif os_name == "Linux" and command.strip().endswith("&"):
-                        import subprocess
                         subprocess.Popen(command, shell=True)
                         output = "Application launched in background."
                     else:

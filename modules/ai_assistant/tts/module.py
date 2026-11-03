@@ -2,10 +2,7 @@ import importlib.util
 import os
 import re
 import queue
-import tempfile
 import multiprocessing
-import torch
-import torchaudio as ta
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QComboBox, QLineEdit,
@@ -37,12 +34,13 @@ class EditableComboBox(QComboBox):
     def hidePopup(self):
         self.lineEdit().setReadOnly(True)
         super().hidePopup()
-        
 
 def T(key, **kwargs):
     return tr(key, module="tts", **kwargs)
 
 def _tts_process_main(config, text_queue, log_queue):
+    import tempfile
+    import queue
     try:
         import pygame
         if not pygame.mixer.get_init():
@@ -56,6 +54,8 @@ def _tts_process_main(config, text_queue, log_queue):
 
     if engine == "chatterbox":
         try:
+            import torch
+            import torchaudio as ta
             import chatterbox.models.tokenizers.tokenizer as cb_tokenizer
             if cb_tokenizer._russian_stresser is None:
                 try:
@@ -84,8 +84,8 @@ def _tts_process_main(config, text_queue, log_queue):
             
             model_instance = ChatterboxMultilingualTTS.from_pretrained(device=device)
             log_queue.put(f"Chatterbox model loaded successfully on {device}.")
-        except ImportError:
-            log_queue.put("chatterbox-tts not installed.")
+        except ImportError as e:
+            log_queue.put(f"Chatterbox dependencies missing: {e}")
             return
         except Exception as e:
             log_queue.put(f"Failed to load Chatterbox: {e}")
@@ -181,9 +181,12 @@ def _tts_process_main(config, text_queue, log_queue):
     
     if model_instance is not None:
         del model_instance
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-
+        try:
+            import torch
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        except ImportError:
+            pass
 
 class TTSModule(BaseModule):
     def __init__(self):
@@ -237,17 +240,10 @@ class TTSModule(BaseModule):
 
     def _check_dependencies(self):
         missing = []
-        checks = {
-            "requests": "requests",
-            "pygame": "pygame",
-            "torch": "torch",
-            "torchaudio": "torchaudio",
-            "chatterbox-tts": "chatterbox",
-            "ruaccent": "ruaccent"
-        }
-        for pip_name, import_name in checks.items():
-            if importlib.util.find_spec(import_name) is None:
-                missing.append(pip_name)
+        if importlib.util.find_spec("pygame") is None:
+            missing.append("pygame")
+        if importlib.util.find_spec("requests") is None:
+            missing.append("requests")
         return missing
 
     def create_widget(self) -> QWidget:
@@ -420,7 +416,7 @@ class TTSModule(BaseModule):
 
     def _toggle_tts(self, checked):
         self.is_enabled = checked
-        self.settings.set("tts", "enabled", value=checked) # СОХРАНЯЕМ ГАЛОЧКУ
+        self.settings.set("tts", "enabled", value=checked)
         
         self.settings.set("tts", "engine", value=self.engine_box.currentText())
         self.settings.set("tts", "device", value=self.device_box.currentText())
@@ -489,8 +485,12 @@ class TTSModule(BaseModule):
             self.lbl_status.setStyleSheet("font-weight: bold; color: #ff4d6d;")
             self._buffer = ""
             
-            if torch.cuda.is_available():
-                torch.cuda.empty_cache()
+            try:
+                import torch
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+            except ImportError:
+                pass
 
     def _log(self, msg):
         if self.log_area:
